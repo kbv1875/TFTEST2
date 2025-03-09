@@ -1,0 +1,34 @@
+name: Terraform Apply
+
+on:
+  workflow_run:
+    workflows: ["Terraform Plan"]  # Trigger this workflow when 'Terraform Plan' workflow completes
+    types:
+      - completed  # Ensure it runs only after 'Terraform Plan' has completed
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: account-prod
+    env:
+      TF_VAR_cloudflare_api_token: "${{ secrets.CLOUDFLARE_API_TOKEN}}"
+
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v3
+
+    - uses: hashicorp/setup-terraform@v2
+
+    - run: terraform version
+
+    - run: terraform init -backend-config="access_key=${{ secrets.TERRAFORM_STATE_STORAGE_KEY}}"
+
+    #- name: Check terraform format
+      #working-directory: modules/r2_bucket
+      #run: terraform fmt -recursive -check -diff
+
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve
+      
