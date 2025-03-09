@@ -5,6 +5,7 @@ resource "cloudflare_r2_bucket" "example_r2_bucket6" {
 }
 
 module "r2_bucket" {
-    source = "./module"
-  
+  source = "./module"
+  cloudflare_account_id = var.cloudflare_account_id
+  r2_location = var.r2_location
 }
