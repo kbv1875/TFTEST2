@@ -2,7 +2,7 @@ name: Release Trigger
 
 on:
   release:
-    types: [published, created]  # 'created' for draft, 'published' for final release
+    types: [published, created, edited]  # 'created' for draft, 'published' for final release
 
 jobs:
   on-release:
